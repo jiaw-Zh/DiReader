@@ -199,7 +199,7 @@ fun PlayerScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                listOf("voice1" to "男声", "voice2" to "女声").forEach { (id, name) ->
+                listOf("zf_xiaobei" to "小北女声", "zm_yunjian" to "云间男声").forEach { (id, name) ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.heightIn(min = 72.dp)
