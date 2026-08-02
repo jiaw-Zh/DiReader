@@ -42,20 +42,23 @@ fun AppNavigation(viewModel: MainViewModel) {
         composable(Routes.BOOKSHELF) {
             val books by viewModel.books.collectAsState()
             val importStatus by viewModel.importStatus.collectAsState()
+            val isModelMissing by viewModel.isModelMissing.collectAsState()
 
             BookshelfScreen(
                 books = books,
+                isModelMissing = isModelMissing,
                 onBookClick = { bookId ->
                     viewModel.openBook(bookId)
                     navController.navigate(Routes.playerRoute(bookId))
                 },
                 onImportClick = {
-                    // 由 MainActivity 处理文件选择器
-                    // 通过回调链传递：MainActivity → ViewModel.importBook()
                     viewModel.requestFileImport()
                 },
                 onDeleteBook = { bookId ->
                     viewModel.deleteBook(bookId)
+                },
+                onRefreshModelCheck = {
+                    viewModel.checkModelExists()
                 }
             )
         }

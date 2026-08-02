@@ -34,11 +34,53 @@ data class BookUiModel(
 @Composable
 fun BookshelfScreen(
     books: List<BookUiModel>,
+    isModelMissing: Boolean = false,
     onBookClick: (String) -> Unit,
     onImportClick: () -> Unit,
-    onDeleteBook: (String) -> Unit
+    onDeleteBook: (String) -> Unit,
+    onRefreshModelCheck: () -> Unit = {}
 ) {
     var bookToDelete by remember { mutableStateOf<String?>(null) }
+    var showMissingModelDialog by remember(isModelMissing) { mutableStateOf(isModelMissing) }
+
+    if (showMissingModelDialog) {
+        AlertDialog(
+            onDismissRequest = { showMissingModelDialog = false },
+            title = {
+                Text(
+                    text = "⚠️ 未检测到离线 TTS 模型",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AccentOrange
+                )
+            },
+            text = {
+                Text(
+                    text = "应用未在车机存储中找到离线语音模型文件 (.onnx)。\n\n请通过 ADB 将 Piper 模型推送到以下路径：\n/sdcard/DiReader/models/piper/\n\n（包含 .onnx 模型、tokens.txt 及 espeak-ng-data 字典文件夹）",
+                    fontSize = 16.sp,
+                    color = TextPrimary
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onRefreshModelCheck()
+                        showMissingModelDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = IceBlue)
+                ) {
+                    Text("重新检测", color = Color.White, fontSize = 16.sp)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showMissingModelDialog = false }) {
+                    Text("稍后配置", color = TextSecondary, fontSize = 16.sp)
+                }
+            },
+            containerColor = DarkSurface,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
 
     Scaffold(
         topBar = {

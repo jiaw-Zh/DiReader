@@ -94,7 +94,12 @@ class MainViewModel : ViewModel() {
     private val _importStatus = MutableStateFlow<String?>(null)
     val importStatus: StateFlow<String?> = _importStatus.asStateFlow()
 
+    // 模型缺失状态
+    private val _isModelMissing = MutableStateFlow(false)
+    val isModelMissing: StateFlow<Boolean> = _isModelMissing.asStateFlow()
+
     init {
+        checkModelExists()
         viewModelScope.launch {
             // 初始化 TTS 引擎
             val modelDir = File(
