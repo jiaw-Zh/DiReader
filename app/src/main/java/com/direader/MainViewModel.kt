@@ -37,8 +37,8 @@ class MainViewModel : ViewModel() {
     private val database: AppDatabase = DiReaderApp.instance.database
     private val epubParser = EpubParser()
 
-    // TTS 引擎：开发阶段使用 Stub，集成 sherpa-onnx 后替换
-    private val ttsEngine: TtsEngine = StubTtsEngine()
+    // 真实 Sherpa-ONNX C++ 本地离线引擎
+    private val ttsEngine: TtsEngine = SherpaOnnxTtsEngine()
     private val audioPlayer = AudioPlayer()
     private val playbackController = PlaybackController(ttsEngine, audioPlayer, database)
 
