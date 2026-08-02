@@ -15,6 +15,6 @@ data class Book(
     val filePath: String,
     val coverPath: String?,
     val totalChapters: Int,
-    val addedAt: Long,
-    val lastReadAt: Long
+    val addedAt: Long = System.currentTimeMillis(),
+    val lastReadAt: Long = System.currentTimeMillis()
 )

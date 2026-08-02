@@ -148,7 +148,7 @@ class MainViewModel : ViewModel() {
                     destFile.writeBytes(bytes)
 
                     // 解析 EPUB
-                    val parsed = epubParser.parse(destFile.absolutePath)
+                    val parsed = epubParser.parse(destFile)
 
                     // 保存封面图片
                     var coverPath: String? = null
@@ -204,7 +204,7 @@ class MainViewModel : ViewModel() {
             database.bookDao().updateLastReadAt(bookId, System.currentTimeMillis())
 
             // 重新解析 EPUB 获取章节内容
-            val parsed = epubParser.parse(book.filePath)
+            val parsed = epubParser.parse(File(book.filePath))
             val chapters = parsed.chapters.map { pc ->
                 Chapter(index = pc.index, title = pc.title, text = pc.text)
             }
