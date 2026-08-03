@@ -72,7 +72,7 @@ fun ChapterListDialog(
                     }
                 }
                 
-                Divider(color = DarkSurfaceVariant)
+                HorizontalDivider(color = DarkSurfaceVariant)
                 
                 // Chapter List
                 LazyColumn(

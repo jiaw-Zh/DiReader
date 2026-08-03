@@ -241,7 +241,7 @@ class PlaybackController(
             val audioToPlay = nextTtsResult ?: ttsEngine.synthesize(text, currentState.voiceId, currentState.speed)
             nextTtsResult = null
 
-            if (audioToPlay != null && audioToPlay.samples.isNotEmpty()) {
+            if (audioToPlay.samples.isNotEmpty()) {
                 // 异步预合成下一句（双缓冲机制）
                 preSynthesizeJob?.cancel()
                 val nextIdx = currentState.sentenceIndex + 1

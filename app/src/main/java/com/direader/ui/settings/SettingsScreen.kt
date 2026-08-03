@@ -89,7 +89,7 @@ fun SettingsScreen(
                 }
             }
 
-            Divider(color = DarkSurfaceVariant)
+            HorizontalDivider(color = DarkSurfaceVariant)
 
             // Speed Control
             Column {
@@ -111,27 +111,27 @@ fun SettingsScreen(
                 )
             }
 
-            Divider(color = DarkSurfaceVariant)
+            HorizontalDivider(color = DarkSurfaceVariant)
 
             // Model Path (Read-only)
             Column {
                 Text("模型路径", fontSize = 20.sp, color = TextPrimary, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "/data/local/tmp/direader_model",
+                    text = "/sdcard/DiReader/models/piper/",
                     fontSize = 16.sp,
                     color = TextSecondary
                 )
             }
             
-            Divider(color = DarkSurfaceVariant)
+            HorizontalDivider(color = DarkSurfaceVariant)
             
             // App Version
             Column {
                 Text("应用版本", fontSize = 20.sp, color = TextPrimary, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "v1.0.0",
+                    text = "v1.0.1",
                     fontSize = 16.sp,
                     color = TextSecondary
                 )

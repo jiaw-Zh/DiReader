@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
@@ -97,7 +97,7 @@ fun PlayerScreen(
             }
         }
         
-        Divider(
+        VerticalDivider(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(1.dp),
@@ -163,7 +163,7 @@ fun PlayerScreen(
                     Icon(Icons.Default.SkipNext, contentDescription = "下一句", tint = TextPrimary, modifier = Modifier.size(36.dp))
                 }
                 IconButton(onClick = onChapterSelect, modifier = Modifier.size(72.dp)) {
-                    Icon(Icons.Default.List, contentDescription = "章节列表", tint = TextPrimary, modifier = Modifier.size(36.dp))
+                    Icon(Icons.AutoMirrored.Filled.List, contentDescription = "章节列表", tint = TextPrimary, modifier = Modifier.size(36.dp))
                 }
                 IconButton(onClick = onAddBookmark, modifier = Modifier.size(72.dp)) {
                     Icon(Icons.Default.Star, contentDescription = "添加书签", tint = TextPrimary, modifier = Modifier.size(36.dp))

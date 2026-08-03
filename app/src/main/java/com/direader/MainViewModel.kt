@@ -278,7 +278,7 @@ class MainViewModel : ViewModel() {
             val privateDir = File(context.getExternalFilesDir(null), "models")
 
             val hasPublicModel = publicDir.exists() && hasOnnx(publicDir)
-            val hasPrivateModel = privateDir != null && privateDir.exists() && hasOnnx(privateDir)
+            val hasPrivateModel = privateDir?.exists() == true && hasOnnx(privateDir)
 
             _isModelMissing.value = !(hasPublicModel || hasPrivateModel)
         }
