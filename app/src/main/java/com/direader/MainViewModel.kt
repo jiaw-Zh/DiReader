@@ -265,9 +265,24 @@ class MainViewModel : ViewModel() {
     // ---- 工具方法 ----
 
     fun checkModelExists() {
-        val modelDir = File(Environment.getExternalStorageDirectory(), "DiReader/models")
-        val hasModelFile = modelDir.exists() && modelDir.walkTopDown().any { it.isFile && it.extension == "onnx" }
-        _isModelMissing.value = !hasModelFile
+        viewModelScope.launch(Dispatchers.IO) {
+            val context = DiReaderApp.instance
+            val publicDir = File(Environment.getExternalStorageDirectory(), "DiReader/models")
+            val privateDir = File(context.getExternalFilesDir(null), "models")
+
+            val hasPublicModel = publicDir.exists() && hasOnnx(publicDir)
+            val hasPrivateModel = privateDir != null && privateDir.exists() && hasOnnx(privateDir)
+
+            _isModelMissing.value = !(hasPublicModel || hasPrivateModel)
+        }
+    }
+
+    private fun hasOnnx(dir: File): Boolean {
+        return try {
+            dir.walkTopDown().maxDepth(5).any { it.isFile && it.extension.equals("onnx", ignoreCase = true) }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     private fun sha256(bytes: ByteArray): String {

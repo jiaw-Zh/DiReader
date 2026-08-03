@@ -24,20 +24,29 @@ class SherpaOnnxTtsEngine : TtsEngine {
     )
 
     override suspend fun initialize(modelDir: String) = withContext(Dispatchers.IO) {
-        val piperDir = File(modelDir, "piper")
-        val targetDir = if (piperDir.exists()) piperDir else File(modelDir)
+        val publicPiperDir = File(android.os.Environment.getExternalStorageDirectory(), "DiReader/models/piper")
+        val publicModelsDir = File(android.os.Environment.getExternalStorageDirectory(), "DiReader/models")
+        val context = com.direader.DiReaderApp.instance
+        val privatePiperDir = File(context.getExternalFilesDir(null), "models/piper")
+        val privateModelsDir = File(context.getExternalFilesDir(null), "models")
+        val inputDir = File(modelDir)
 
-        if (!targetDir.exists()) {
+        val candidates = listOf(publicPiperDir, publicModelsDir, privatePiperDir, privateModelsDir, inputDir)
+        val targetDir = candidates.firstOrNull { dir ->
+            dir.exists() && dir.walkTopDown().maxDepth(3).any { it.isFile && it.extension.equals("onnx", ignoreCase = true) }
+        }
+
+        if (targetDir == null) {
             _isReady = false
             return@withContext
         }
 
-        // 查找 .onnx 模型文件、tokens.txt 及 espeak-ng-data
-        val modelFile = targetDir.listFiles()?.firstOrNull { it.extension == "onnx" }
-        val tokensFile = File(targetDir, "tokens.txt")
-        val dataDir = File(targetDir, "espeak-ng-data")
+        // 递归深层查找 .onnx 模型文件、tokens.txt 及 espeak-ng-data 目录
+        val modelFile = targetDir.walkTopDown().maxDepth(3).firstOrNull { it.isFile && it.extension.equals("onnx", ignoreCase = true) }
+        val tokensFile = targetDir.walkTopDown().maxDepth(3).firstOrNull { it.isFile && it.name.equals("tokens.txt", ignoreCase = true) }
+        val dataDir = targetDir.walkTopDown().maxDepth(3).firstOrNull { it.isDirectory && it.name.equals("espeak-ng-data", ignoreCase = true) }
 
-        if (modelFile == null || !tokensFile.exists() || !dataDir.exists()) {
+        if (modelFile == null || tokensFile == null || dataDir == null) {
             _isReady = false
             return@withContext
         }
