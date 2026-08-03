@@ -39,7 +39,8 @@ fun BookshelfScreen(
     onBookClick: (String) -> Unit,
     onImportClick: () -> Unit,
     onDeleteBook: (String) -> Unit,
-    onRefreshModelCheck: () -> Unit = {}
+    onRefreshModelCheck: () -> Unit = {},
+    onRequestAllFilesPermission: () -> Unit = {}
 ) {
     var bookToDelete by remember { mutableStateOf<String?>(null) }
     var showMissingModelDialog by remember(isModelMissing) { mutableStateOf(isModelMissing) }
@@ -57,25 +58,36 @@ fun BookshelfScreen(
             },
             text = {
                 Text(
-                    text = "应用未在车机存储中找到离线语音模型文件 (.onnx)。\n\n请通过 ADB 将 Piper 模型推送到以下路径：\n/sdcard/DiReader/models/piper/\n\n（包含 .onnx 模型、tokens.txt 及 espeak-ng-data 字典文件夹）",
-                    fontSize = 16.sp,
+                    text = "应用未在内部存储中找到离线语音模型文件 (.onnx)。\n\n📌 解决方案（针对 Android 13~16）：\n1. 点击下方「授权所有文件权限」，允许应用读取 .onnx 格式文件。\n2. 或将模型存放在无需权限的专属目录：\nAndroid/data/com.direader/files/models/piper/\n\n（车机放置路径：/sdcard/DiReader/models/piper/）",
+                    fontSize = 15.sp,
                     color = TextPrimary
                 )
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        onRefreshModelCheck()
-                        showMissingModelDialog = false
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = IceBlue)
-                ) {
-                    Text("重新检测", color = Color.White, fontSize = 16.sp)
+                Row {
+                    Button(
+                        onClick = {
+                            onRequestAllFilesPermission()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = AccentOrange)
+                    ) {
+                        Text("授权所有文件权限", color = Color.White, fontSize = 14.sp)
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            onRefreshModelCheck()
+                            showMissingModelDialog = false
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = IceBlue)
+                    ) {
+                        Text("重新检测", color = Color.White, fontSize = 14.sp)
+                    }
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showMissingModelDialog = false }) {
-                    Text("稍后配置", color = TextSecondary, fontSize = 16.sp)
+                    Text("稍后配置", color = TextSecondary, fontSize = 14.sp)
                 }
             },
             containerColor = DarkSurface,

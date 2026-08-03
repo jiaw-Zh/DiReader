@@ -43,8 +43,15 @@ class MainViewModel : ViewModel() {
     // 文件导入回调（由 MainActivity 设置）
     var onRequestFileImport: (() -> Unit)? = null
 
+    // 文件管理权限请求回调（由 MainActivity 设置）
+    var onRequestAllFilesPermission: (() -> Unit)? = null
+
     fun requestFileImport() {
         onRequestFileImport?.invoke()
+    }
+
+    fun requestAllFilesPermission() {
+        onRequestAllFilesPermission?.invoke()
     }
 
     // ---- 书架状态 ----

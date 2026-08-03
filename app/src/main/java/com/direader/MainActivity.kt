@@ -46,18 +46,22 @@ class MainActivity : ComponentActivity() {
         viewModel.checkModelExists()
     }
 
+    private val manageStorageLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        viewModel.checkModelExists()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 动态申请存储读取权限
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            permissionLauncher.launch(
-                arrayOf(
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            )
+        // 设置全文件权限请求回调
+        viewModel.onRequestAllFilesPermission = {
+            requestAllFilesAccessPermission()
         }
+
+        // 动态申请存储权限
+        requestStoragePermissions()
 
         // 全屏沉浸模式
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -102,6 +106,38 @@ class MainActivity : ComponentActivity() {
         if (intent?.action == Intent.ACTION_VIEW) {
             intent.data?.let { uri ->
                 viewModel.importBook(uri)
+            }
+        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkModelExists()
+    }
+
+    private fun requestStoragePermissions() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            if (!android.os.Environment.isExternalStorageManager()) {
+                requestAllFilesAccessPermission()
+            }
+        } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            permissionLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+            )
+        }
+    }
+
+    private fun requestAllFilesAccessPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                manageStorageLauncher.launch(intent)
+            } catch (e: Exception) {
+                val intent = Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                manageStorageLauncher.launch(intent)
             }
         }
     }

@@ -59,6 +59,9 @@ fun AppNavigation(viewModel: MainViewModel) {
                 },
                 onRefreshModelCheck = {
                     viewModel.checkModelExists()
+                },
+                onRequestAllFilesPermission = {
+                    viewModel.requestAllFilesPermission()
                 }
             )
         }
