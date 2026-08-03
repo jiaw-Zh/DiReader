@@ -72,8 +72,8 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
-    // Sherpa-ONNX 离线 TTS C++ 引擎
-    implementation("com.bihe0832.android:lib-sherpa-onnx:1.10.40")
+    // Sherpa-ONNX 离线 TTS C++ 引擎 (Maven Central 规范版本号)
+    implementation("com.bihe0832.android:lib-sherpa-onnx:8.5.4")
 
     // Core
     implementation("androidx.core:core-ktx:1.15.0")
