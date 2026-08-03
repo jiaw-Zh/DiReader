@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 /**
  * 单 Activity 入口。
- * 全屏横屏显示，管理文件选择器和权限。
+ * 全屏横屏显示，管理文件选择器和系统存储/媒体权限。
  */
 class MainActivity : ComponentActivity() {
 
@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let {
-            // 持久化 URI 权限
             contentResolver.takePersistableUriPermission(
                 it, Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
@@ -102,15 +101,17 @@ class MainActivity : ComponentActivity() {
         handleIncomingIntent(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.checkModelExists()
+    }
+
     private fun handleIncomingIntent(intent: Intent?) {
         if (intent?.action == Intent.ACTION_VIEW) {
             intent.data?.let { uri ->
                 viewModel.importBook(uri)
             }
         }
-    override fun onResume() {
-        super.onResume()
-        viewModel.checkModelExists()
     }
 
     private fun requestStoragePermissions() {
