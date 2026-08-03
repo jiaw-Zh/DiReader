@@ -71,7 +71,7 @@ class SherpaOnnxTtsEngine : TtsEngine {
         // 调用 Sherpa-ONNX C++ 底层 JNI 接口生成音频波形
         val audio = engine.generate(text = text, sid = 0, speed = speed)
         TtsResult(
-            samples = audio.samples,
+            samples = audio.pcm16Samples,
             sampleRate = audio.sampleRate
         )
     }

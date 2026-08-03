@@ -266,6 +266,12 @@ class MainViewModel : ViewModel() {
 
     // ---- 工具方法 ----
 
+    fun checkModelExists() {
+        val modelDir = File(Environment.getExternalStorageDirectory(), "DiReader/models")
+        val hasModelFile = modelDir.exists() && modelDir.walkTopDown().any { it.isFile && it.extension == "onnx" }
+        _isModelMissing.value = !hasModelFile
+    }
+
     private fun sha256(bytes: ByteArray): String {
         val digest = MessageDigest.getInstance("SHA-256")
         val hash = digest.digest(bytes)
