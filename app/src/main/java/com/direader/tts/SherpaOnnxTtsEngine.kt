@@ -68,7 +68,7 @@ class SherpaOnnxTtsEngine : TtsEngine {
         try {
             tts = OfflineTts(config)
             _isReady = true
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
             _isReady = false
         }

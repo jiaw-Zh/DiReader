@@ -13,8 +13,8 @@ android {
         applicationId = "com.direader"
         minSdk = 24
         targetSdk = 30  // 车机为 Android 10 (API 29)，targetSdk 30 避免触发分区存储强制
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         ndk {
             abiFilters += listOf("arm64-v8a")
